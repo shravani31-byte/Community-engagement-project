@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.py[cod]
+dataset/SMSSpamCollection
+dataset/*.zip
+models/*.joblib

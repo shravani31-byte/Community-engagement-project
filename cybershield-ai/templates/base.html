@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b46">
+  <meta name="description" content="An educational spam detector and online safety learning project for students.">
+  <title>{% block title %}CyberShield AI{% endblock %} | CyberShield AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="CyberShield AI home">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span class="brand-name">CyberShield <span>AI</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="{{ url_for('home') }}" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('detector') }}" {% if request.path == '/detector' %}aria-current="page"{% endif %}>Message Detector</a>
+        <a href="{{ url_for('awareness') }}" {% if request.path == '/awareness' %}aria-current="page"{% endif %}>Cyber Safety</a>
+        <a href="{{ url_for('quiz') }}" {% if request.path == '/quiz' %}aria-current="page"{% endif %}>Awareness Quiz</a>
+        <a href="{{ url_for('habits') }}" {% if request.path == '/habits' %}aria-current="page"{% endif %}>Good Habits</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="brand brand-footer" href="{{ url_for('home') }}">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span class="brand-name">CyberShield <span>AI</span></span>
+      </a>
+      <p>Social Media Awareness Program in a School <span>·</span> Community Engagement Project</p>
+      <p class="footer-note">Educational tool only. AI can make mistakes. Never share real passwords, OTPs, or banking details.</p>
+    </div>
+  </footer>
+</body>
+</html>

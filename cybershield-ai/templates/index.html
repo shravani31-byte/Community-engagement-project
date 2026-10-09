@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Think Before You Click{% endblock %}
+{% block content %}
+<section class="hero section-wrap">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="eyebrow-dot"></span> A student project for safer messages</p>
+    <h1>Think before<br>you <span>click.</span></h1>
+    <p class="hero-lede">Learn to spot suspicious messages. CyberShield AI uses a trained language model to help you pause, check, and choose safely.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="{{ url_for('detector') }}"><span aria-hidden="true">⌕</span> Check a message</a>
+      <a class="text-link" href="{{ url_for('awareness') }}">Explore safety topics <span aria-hidden="true">→</span></a>
+    </div>
+    <p class="privacy-note"><span aria-hidden="true">◉</span> Messages are checked for this request only, not saved.</p>
+  </div>
+  <div class="hero-art" aria-label="A message safety check illustration">
+    <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+    <div class="shield-plate"><span class="shield-check" aria-hidden="true">✓</span><span class="plate-caption">PAUSE · VERIFY · PROTECT</span></div>
+    <div class="signal signal-top"><span class="signal-dot"></span> Message check</div>
+    <div class="signal signal-bottom"><span class="signal-icon" aria-hidden="true">◎</span><span>Think critically<br><small>Every message deserves a second look</small></span></div>
+    <span class="art-spark spark-a" aria-hidden="true">+</span><span class="art-spark spark-b" aria-hidden="true">+</span>
+  </div>
+</section>
+
+<section class="section-wrap feature-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">Your everyday safety kit</p><h2>Small checks. <span>Safer choices.</span></h2></div>
+    <p>Build the confidence to question a message before acting on it.</p>
+  </div>
+  <div class="feature-grid">
+    <article class="feature-card feature-blue"><span class="feature-icon" aria-hidden="true">⌕</span><p class="card-index">01 / CHECK</p><h3>AI spam detection</h3><p>Try a text with a real machine-learning model trained on labeled SMS examples.</p><a href="{{ url_for('detector') }}">Open the detector <span aria-hidden="true">→</span></a></article>
+    <article class="feature-card feature-green"><span class="feature-icon" aria-hidden="true">◈</span><p class="card-index">02 / LEARN</p><h3>Phishing awareness</h3><p>Get to know the warning signs behind fake links, prizes, and urgent requests.</p><a href="{{ url_for('awareness') }}">Browse safety topics <span aria-hidden="true">→</span></a></article>
+    <article class="feature-card feature-yellow"><span class="feature-icon" aria-hidden="true">✳</span><p class="card-index">03 / PRACTISE</p><h3>Online safety</h3><p>Test your instincts with short scenarios about privacy, passwords, and more.</p><a href="{{ url_for('quiz') }}">Take the quiz <span aria-hidden="true">→</span></a></article>
+  </div>
+</section>
+
+<section class="threat-band">
+  <div class="section-wrap threat-inner">
+    <div><p class="eyebrow">Watch for these patterns</p><h2>Scams often ask you to<br><span>act before you think.</span></h2></div>
+    <ul class="threat-list"><li><span>01</span> Hurry or secrecy</li><li><span>02</span> A prize you never entered</li><li><span>03</span> A link from an unknown sender</li><li><span>04</span> Passwords, codes, or money</li></ul>
+  </div>
+</section>
+<section class="closing-strip section-wrap"><p>Unsure? Stop. Don't reply. Talk to a trusted adult.</p><a class="button button-dark" href="{{ url_for('quiz') }}">Practise spotting scams <span aria-hidden="true">→</span></a></section>
+{% endblock %}

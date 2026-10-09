@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Awareness Quiz{% endblock %}
+{% block content %}
+<section class="page-intro section-wrap intro-quiz">
+  <p class="eyebrow"><span class="eyebrow-dot"></span> The safety check-in</p>
+  <h1>What would<br><span>you do?</span></h1>
+  <p>Ten quick scenarios. Choose an answer to see why it helps keep you and your accounts safer.</p>
+</section>
+<section class="section-wrap quiz-section">
+  <div class="quiz-shell" id="quiz-shell">
+    <div class="quiz-topline"><span id="question-counter">Question 1 of 10</span><span class="quiz-score" id="score-display">Score <strong>0</strong></span></div>
+    <progress class="progress-track" id="progress-fill" max="10" value="0" aria-label="Quiz progress">0%</progress>
+    <div id="question-area">
+      <p class="eyebrow" id="question-category">SCENARIO</p>
+      <h2 id="question-text"></h2>
+      <div class="answer-list" id="answer-list"></div>
+      <div class="quiz-feedback" id="quiz-feedback" aria-live="polite" hidden></div>
+      <div class="quiz-controls"><span id="answer-hint">Choose one answer to continue.</span><button class="button button-primary" id="next-button" type="button" disabled>Next question <span aria-hidden="true">→</span></button></div>
+    </div>
+    <div id="quiz-result" class="quiz-result" hidden aria-live="polite"></div>
+  </div>
+</section>
+{% endblock %}
+{% block head %}<script src="{{ url_for('static', filename='js/quiz.js') }}" defer></script>{% endblock %}

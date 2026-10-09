@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Message Detector{% endblock %}
+{% block content %}
+<section class="page-intro section-wrap intro-detector">
+  <p class="eyebrow"><span class="eyebrow-dot"></span> The message lab</p>
+  <h1>Pause. Paste.<br><span>Check.</span></h1>
+  <p>Try a sample or paste a message to see how the trained model classifies it. Use made-up examples only. Never paste real passwords, OTPs, or banking details.</p>
+</section>
+<section class="detector-layout section-wrap">
+  <div class="detector-main">
+    <div class="panel panel-composer">
+      <div class="panel-heading"><div><p class="eyebrow">01 / Message</p><h2>What did you receive?</h2></div><span class="privacy-chip"><span aria-hidden="true">●</span> Not stored</span></div>
+      <label class="visually-hidden" for="message-input">Message to check</label>
+      <textarea id="message-input" maxlength="5000" placeholder="Paste a sample message here…" aria-describedby="message-help char-count"></textarea>
+      <div class="textarea-meta"><p id="message-help">Use a fictional message or one with all personal details removed.</p><span id="char-count" aria-live="polite">0 / 5,000</span></div>
+      <div class="form-actions"><button class="button button-primary" id="predict-button" type="button"><span aria-hidden="true">⌕</span> Predict message</button><button class="button button-outline" id="clear-button" type="button">Clear</button><span class="loading-state" id="loading-state" hidden><span class="spinner" aria-hidden="true"></span> Checking with the model…</span></div>
+      <div id="result" class="result-panel" aria-live="polite" aria-atomic="true" hidden>
+        <div class="result-top"><span class="result-symbol" id="result-symbol" aria-hidden="true"></span><div><p class="eyebrow" id="result-label"></p><h3 id="result-title"></h3></div></div>
+        <p id="result-explanation"></p>
+        <ul id="result-tips" class="result-tips"></ul>
+        <p class="result-disclaimer" id="result-disclaimer"></p>
+      </div>
+    </div>
+    <div class="examples-block">
+      <div class="examples-heading"><h3>Try an example</h3><span>Tap to load; sample links use the reserved .invalid domain</span></div>
+      <div class="example-grid">
+        <button class="example-button" type="button" data-message="Hi Maya, are we still meeting at the library after class? I'll be there at 3."><span class="example-tag">Everyday</span><span>“Are we still meeting at the library?”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="URGENT! You have won a £1,000 gift voucher. Claim now by calling 0906 123 4567."><span class="example-tag">Unexpected prize</span><span>“You have won a gift voucher. Claim now!”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="Reminder: our science club meets in room 12 at lunchtime tomorrow. Bring your notebook."><span class="example-tag">School reminder</span><span>“Science club meets at lunchtime tomorrow.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="Your account will close today. Verify your details at http://example.invalid/login immediately."><span class="example-tag">Urgent link</span><span>“Your account will close today. Verify now.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="We just met online. Don't tell anyone we are chatting. Send me your live location so I can surprise you."><span class="example-tag">Secrecy &amp; location</span><span>“Keep our chat secret and send your location.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="If you don't meet me alone after school, I will share our private chat with everyone."><span class="example-tag">Pressure &amp; threats</span><span>“Meet me alone or I'll share our chat.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="URGENT! Your account will be suspended today. Verify your account immediately at https://example.invalid/verify"><span class="example-tag">Suspicious link</span><span>“Your account will be suspended. Verify now.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+        <button class="example-button" type="button" data-message="Scan this QR code to claim your free prize today. Claim now at https://example.invalid/qr"><span class="example-tag">QR prize scam</span><span>“Scan to claim your free prize today.”</span><span class="example-arrow" aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+    <div class="student-safety-note"><span aria-hidden="true">!</span><p><strong>Personal safety matters more than a model label.</strong> The spam model may miss harassment, threats, grooming, or unsafe requests. If someone pressures you to keep secrets, share your location or private images, or meet alone, stop replying and tell a trusted adult. A HAM result does not make it safe.</p></div>
+  </div>
+  <aside class="detector-aside">
+    <div class="aside-note"><span class="aside-icon" aria-hidden="true">◎</span><p class="eyebrow">How to use the result</p><h3>A helpful hint, not a verdict.</h3><p>The model has learned patterns from older SMS examples. It can miss new scams or flag normal messages.</p><a href="{{ url_for('awareness') }}">Learn the warning signs <span aria-hidden="true">→</span></a></div>
+    <div class="aside-checklist"><p class="eyebrow">Before you tap</p><ul><li>Did you expect this message?</li><li>Can you verify who sent it?</li><li>Is it asking for private details?</li><li>Can you ask a trusted adult?</li></ul></div>
+  </aside>
+</section>
+{% endblock %}
+{% block head %}<script src="{{ url_for('static', filename='js/detector.js') }}" defer></script>{% endblock %}
