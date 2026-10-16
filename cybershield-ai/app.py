@@ -1,7 +1,9 @@
 """Flask application for the CyberShield AI learning project."""
 
 import logging
+import ipaddress
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import joblib
 from flask import Flask, jsonify, render_template, request
@@ -14,6 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "models" / "spam_classifier.joblib"
 VECTORIZER_PATH = BASE_DIR / "models" / "tfidf_vectorizer.joblib"
 MAX_MESSAGE_LENGTH = 5000
+MAX_URL_LENGTH = 2048
+URL_SHORTENERS = {"bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "rb.gy"}
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 24 * 1024
@@ -64,6 +68,42 @@ def safety_guidance(prediction):
             "Verify unexpected requests through a contact method you already trust.",
             "If the message pressures or frightens you, stop replying and tell a trusted adult.",
         ],
+    }
+
+
+def inspect_url(url):
+    """Flag common URL warning signs without connecting to the destination."""
+    parsed = urlsplit(url)
+    hostname = parsed.hostname
+    if parsed.scheme not in {"http", "https"} or not hostname:
+        raise ValueError("Enter a complete HTTP or HTTPS link.")
+
+    hostname = hostname.rstrip(".").casefold()
+    warnings = []
+    if parsed.scheme == "http":
+        warnings.append("This link does not use HTTPS, so its connection is not encrypted.")
+    if parsed.username is not None or parsed.password is not None:
+        warnings.append("The link includes text before the @ symbol that can disguise its real destination.")
+    try:
+        address = ipaddress.ip_address(hostname)
+        if address.is_private or address.is_loopback or address.is_link_local:
+            warnings.append("This link points to a private or local network address.")
+        else:
+            warnings.append("This link uses a numeric IP address instead of a recognizable domain name.")
+    except ValueError:
+        if "xn--" in hostname:
+            warnings.append("The domain uses encoded characters that can resemble other letters.")
+        if hostname in URL_SHORTENERS:
+            warnings.append("This is a shortened link, so its final destination is hidden.")
+
+    return {
+        "host": hostname,
+        "warnings": warnings,
+        "risk": "caution" if warnings else "no-obvious-warning",
+        "disclaimer": (
+            "This local check does not visit the link or check its reputation. "
+            "No warning signs found does not mean the link is safe."
+        ),
     }
 
 
@@ -139,6 +179,25 @@ def predict():
     except Exception:
         app.logger.exception("Message prediction failed")
         return jsonify(error="The checker could not process that message. Please try again."), 500
+
+
+@app.post("/check-link")
+def check_link():
+    if not request.is_json:
+        return jsonify(error="Send the link as JSON."), 400
+
+    data = request.get_json(silent=True)
+    url = data.get("url") if isinstance(data, dict) else None
+    if not isinstance(url, str) or not url.strip():
+        return jsonify(error="Enter a link to check."), 400
+    url = url.strip()
+    if len(url) > MAX_URL_LENGTH:
+        return jsonify(error=f"Links must be {MAX_URL_LENGTH} characters or fewer."), 400
+
+    try:
+        return jsonify(inspect_url(url))
+    except ValueError as error:
+        return jsonify(error=str(error)), 400
 
 
 @app.errorhandler(RequestEntityTooLarge)

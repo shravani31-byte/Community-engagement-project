@@ -69,7 +69,7 @@ Open http://127.0.0.1:5000. The Flask server binds to the local computer only an
 ## Try the features
 
 - **Home:** follow the detector, safety-guide, and quiz links; all five navigation pages are available from the header.
-- **Message Detector:** choose one of the four examples or enter fictional text, press Predict, review the model label and safety tips, then try Clear. Empty input is rejected; the counter shows the 5,000-character limit; Ctrl+Enter (Cmd+Enter on Mac) also submits.
+- **Message Detector:** choose an example or enter fictional text, then review the model label and safety tips. You can also check a typed web address or choose a QR-code image. QR decoding uses a bundled browser library; images are decoded on the device, and the link check only flags common warning signs without visiting the destination. Empty message input is rejected; Ctrl+Enter (Cmd+Enter on Mac) submits.
 - **Awareness Quiz:** answer all ten questions, read the immediate explanation, view the score and tailored recommendation, then restart.
 - **Cyber Safety:** review all eleven plain-language topics and their warning signs, examples, and protections.
 - **Good Habits:** review practical habits for privacy, passwords, links, respectful sharing, and asking for help.
@@ -84,7 +84,9 @@ These are test inputs, not promised results. The SMS spam model is not a harassm
 
 ## How the parts communicate
 
-The browser's detector JavaScript sends the entered text as JSON to Flask at `POST /predict`. Flask validates size and content, transforms the message with the saved TF-IDF vectorizer, and asks the saved classifier for `spam` or `ham`. It returns the label and category-specific educational guidance as JSON; JavaScript updates the page without reloading. Quiz questions and scoring run locally in JavaScript and are not sent to the server. Submitted message text is not written to a database, file, or application log.
+The browser's detector JavaScript sends entered message text as JSON to Flask at `POST /predict`. Flask validates size and content, transforms the message with the saved TF-IDF vectorizer, and asks the saved classifier for `spam` or `ham`. Link checks send the typed or QR-decoded URL to the local Flask app at `POST /check-link`; the server examines its structure without connecting to it. QR images are decoded in the browser and are not uploaded. Neither messages nor URLs are written to a database, file, or application log. Quiz questions and scoring run locally in JavaScript.
+
+The URL check is a basic educational heuristic, not a reputation or malware scanner. It flags indicators such as plain HTTP, URL credentials, numeric IP addresses, encoded domains, and known shorteners. No warning signs found does not mean a link is safe; verify unexpected links with a trusted adult and do not open them just because they pass this check.
 
 ## Test the JSON endpoint
 
