@@ -69,7 +69,7 @@ Open http://127.0.0.1:5000. The Flask server binds to the local computer only an
 ## Try the features
 
 - **Home:** follow the detector, safety-guide, and quiz links; all five navigation pages are available from the header.
-- **Message Detector:** choose an example or enter fictional text, then review the model label and safety tips. You can also check a typed web address or choose a QR-code image. QR decoding uses a bundled browser library; images are decoded on the device, and the link check only flags common warning signs without visiting the destination. Empty message input is rejected; Ctrl+Enter (Cmd+Enter on Mac) submits.
+- **Message Detector:** choose an example or enter fictional text, then review the message-specific model label and safety tips. Results distinguish a message flagged as possibly illegitimate from one not flagged as spam (which is not proof of legitimacy). You can also check a typed web address or choose a QR-code image; results are labeled separately as a link check or QR-code check. QR decoding uses a bundled browser library; images are decoded on the device, and the link check only flags common warning signs without visiting the destination. Empty message input is rejected; Ctrl+Enter (Cmd+Enter on Mac) submits.
 - **Awareness Quiz:** answer all ten questions, read the immediate explanation, view the score and tailored recommendation, then restart.
 - **Cyber Safety:** review all eleven plain-language topics and their warning signs, examples, and protections.
 - **Good Habits:** review practical habits for privacy, passwords, links, respectful sharing, and asking for help.

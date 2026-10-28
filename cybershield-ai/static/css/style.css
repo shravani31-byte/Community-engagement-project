@@ -173,6 +173,7 @@ h1, h2, h3 { color: var(--navy); font-family: var(--font-display); letter-spacin
 .link-result { margin-top: 14px; padding: 15px; border: 1px solid; border-radius: 4px; }
 .link-caution { color: #762820; background: #fff1ef; border-color: #c0392b; }
 .link-clear { color: #275846; background: #edf7f0; border-color: #c7e2d1; }
+.link-result-label { margin: 0 0 5px !important; color: inherit; font-size: 9px !important; font-weight: 700; letter-spacing: .6px; }
 .link-result h3 { margin: 0; color: inherit; font-size: 15px; }
 .link-result p, .link-result ul { margin: 8px 0 0; font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; }
 .link-result ul { padding-left: 18px; }

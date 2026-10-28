@@ -31,8 +31,8 @@ function showPrediction(data) {
   resultPanel.className = `result-panel ${isSpam ? "result-spam" : "result-ham"}`;
   document.querySelector("#result-symbol").textContent = isSpam ? "!" : "✓";
   document.querySelector("#result-label").textContent = isSpam
-    ? "MODEL RESULT · SPAM · POSSIBLY ILLEGITIMATE"
-    : "MODEL RESULT · HAM · NOT FLAGGED AS SPAM";
+    ? "MESSAGE CHECK · POSSIBLY ILLEGITIMATE · SPAM PATTERNS FOUND"
+    : "MESSAGE CHECK · NO SPAM DETECTED · NOT CONFIRMED LEGITIMATE";
   document.querySelector("#result-title").textContent = data.title;
   document.querySelector("#result-explanation").textContent = data.explanation;
   document.querySelector("#result-disclaimer").textContent = data.disclaimer;
@@ -79,12 +79,15 @@ function showLinkStatus(message) {
   linkStatus.hidden = false;
 }
 
-function showLinkResult(data) {
+function showLinkResult(data, source) {
+  const isQr = source === "qr";
+  const hasWarnings = data.risk === "caution";
   linkResult.hidden = false;
-  linkResult.className = `link-result ${data.risk === "caution" ? "link-caution" : "link-clear"}`;
-  document.querySelector("#link-result-title").textContent = data.risk === "caution"
-    ? "Warning signs found"
-    : "No obvious warning signs found";
+  linkResult.className = `link-result ${hasWarnings ? "link-caution" : "link-clear"}`;
+  document.querySelector("#link-result-label").textContent = isQr ? "QR CODE CHECK" : "LINK CHECK";
+  document.querySelector("#link-result-title").textContent = hasWarnings
+    ? `${isQr ? "QR code link" : "Link"}: possibly suspicious`
+    : `${isQr ? "QR code link" : "Link"}: no warning signs found (not confirmed legitimate)`;
   document.querySelector("#link-result-host").textContent = `Destination domain: ${data.host}`;
   const warnings = document.querySelector("#link-result-warnings");
   warnings.replaceChildren();
@@ -96,7 +99,7 @@ function showLinkResult(data) {
   document.querySelector("#link-result-disclaimer").textContent = data.disclaimer;
 }
 
-async function checkLink() {
+async function checkLink(source = "link") {
   const url = linkInput.value.trim();
   if (!url) {
     showLinkStatus("Enter a complete web address to check.");
@@ -117,7 +120,7 @@ async function checkLink() {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "The link could not be checked.");
     linkStatus.hidden = true;
-    showLinkResult(data);
+    showLinkResult(data, source);
   } catch (error) {
     showLinkStatus(error instanceof TypeError
       ? "The server could not be reached. Check that CyberShield AI is running and try again."
@@ -154,7 +157,7 @@ async function decodeQrImage(file) {
     } else {
       linkInput.value = value;
       showLinkStatus("QR link read on this device. Checking its warning signs now; the destination will not be opened.");
-      await checkLink();
+      await checkLink("qr");
     }
   } catch {
     showLinkStatus("Could not read that image. Try a clear PNG, JPEG, or WebP QR image.");
